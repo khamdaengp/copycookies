@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CopyCookies - Ultimate Chrome Extension</title>
+    <meta name="description" content="Copy, Export, and Import all Cookies, Local Storage, and Session Storage used in the current tab.">
+    <!-- Modern Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Premium Dark Mode Colors */
+            --bg-color: #030712; /* Very deep navy/black */
+            --surface-color: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --accent-primary: #3b82f6; /* Vibrant Blue */
+            --accent-secondary: #8b5cf6; /* Vibrant Purple */
+            --accent-gradient: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            /* Atmospheric background glow */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.12), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.12), transparent 25%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            width: 100%;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            margin-left: 2rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 7rem 0 5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 5.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin-bottom: 3.5rem;
+            line-height: 1.6;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px -5px rgba(139, 92, 246, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--surface-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+        }
+
+        .feature-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeUpIn 0.8s ease-out forwards;
+        }
+        
+        .feature-card:nth-child(1) { animation-delay: 0.2s; }
+        .feature-card:nth-child(2) { animation-delay: 0.4s; }
+        .feature-card:nth-child(3) { animation-delay: 0.6s; }
+
+        /* Top highlight border for glass effect */
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeUpIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .cta-group { flex-direction: column; width: 100%; max-width: 300px; }
+            .btn { width: 100%; justify-content: center; }
+            .hero { padding: 4rem 0 2rem 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="logo">CopyCookies</div>
+            <div class="nav-links">
+                <a href="https://github.com/sammrai/copycookies" target="_blank">Repository</a>
+                <a href="#features">Features</a>
+            </div>
+        </nav>
+
+        <header class="hero">
+            <h1>Master Your <br><span style="background: var(--accent-gradient); -webkit-background-clip: text; color: transparent;">Browser State</span></h1>
+            <p>The ultimate developer extension to effortlessly export and import Cookies, Local Storage, and Session Storage with a single click.</p>
+            <div class="cta-group">
+                <a href="https://github.com/sammrai/copycookies/archive/refs/heads/main.zip" target="_blank" class="btn btn-primary">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download Extension
+                </a>
+                <a href="https://github.com/sammrai/copycookies#readme" target="_blank" class="btn btn-secondary">
+                    View Instructions
+                </a>
+            </div>
+        </header>
+
+        <section id="features" class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🚀</div>
+                <h3>Complete State Export</h3>
+                <p>Don't just stop at cookies. Instantly bundle your active tab's entire Local Storage and Session Storage into one clean JSON backup file.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⏳</div>
+                <h3>Smart Expiration</h3>
+                <p>Never worry about stale backups. Automatically extends the lifespan of expired imported cookies by a year so they don't immediately vanish.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3>Cross-Profile Portability</h3>
+                <p>Built for debugging and testing. Seamlessly move active sessions across different browser profiles, incognito windows, or share them with your team.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Open Source &middot; Licensed under Apache 2.0 &middot; Designed for Developers</p>
+        </div>
+    </footer>
+</body>
+</html>
