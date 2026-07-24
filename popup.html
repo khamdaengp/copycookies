@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            min-width: 200px;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #e9e9e9;
+        }
+
+        hr {
+            margin: 15px 0;
+            border: 0;
+            border-top: 1px solid #ddd;
+        }
+
+        #status {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 13px;
+            color: #333;
+            display: none;
+        }
+
+        .success {
+            color: #2e7d32 !important;
+        }
+
+        .error {
+            color: #c62828 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="copyBtn">Copy to Clipboard</button>
+    <button id="exportBtn">Export to File</button>
+    <hr>
+    <input type="file" id="fileInput" accept=".json" style="display: none;" />
+    <button id="importBtn">Import from File</button>
+
+    <div id="status"></div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "copycookies",
+  "version": "1.0.0",
+  "description": "Chrome extension to copy cookies to clipboard",
+  "scripts": {
+    "build": "echo 'No build step required'"
+  },
+  "devDependencies": {}
+}
